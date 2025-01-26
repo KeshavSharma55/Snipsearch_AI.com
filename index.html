@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snipsearch AI</title>
-  <link rel="stylesheet" href="style.css">
-<style type="text/css" id="dcoder_stylesheet">/* General Styles */
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Snipsearch AI</title> 
+  <link rel="stylesheet" href="style.css"> 
+ <style type="text/css" id="dcoder_stylesheet">/* General Styles */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -116,22 +116,20 @@ body {
     font-size: 14px;
     padding: 8px 10px;
   }
-}</style></head>
-<body>
-  <div class="chat-container">
-    <div id="chat-box">
-      <!-- Initial Message from AI -->
-      <div class="chat-message bot">
-        Welcome to Snipsearch AI! This AI tool is in development. You can do advanced math calculations and perform web searches. Thanks for using!
-      </div>
-    </div>
-    <div class="chat-input">
-      <input type="text" id="user-input" placeholder="Type your message here...">
-      <button id="send-btn">Send</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
-
+}</style></head> 
+ <body> 
+  <div class="chat-container"> 
+   <div id="chat-box"> <!-- Initial Message from AI --> 
+    <div class="chat-message bot">
+      Welcome to Snipsearch AI! This AI tool is in development. You can do advanced math calculations and perform web searches. Thanks for using! 
+    </div> 
+   </div> 
+   <div class="chat-input"> 
+    <input type="text" id="user-input" placeholder="Type your message here..."> <button id="send-btn">Send</button> 
+   </div> 
+  </div> 
+  <script src="script.js"></script> 
+ 
 <script type="text/javascript" id="dcoder_script">const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
@@ -157,8 +155,13 @@ function handleUserInput(input) {
   // Process the input
   const response = getAIResponse(input);
 
-  // Add AI's response to the chatbox
-  addMessage("bot", response);
+  // If response is a web search, redirect user to Google
+  if (response.type === "redirect") {
+    window.open(response.url, "_blank"); // Open the search in a new tab
+  } else {
+    // Otherwise, add the AI response to the chatbox
+    addMessage("bot", response.message);
+  }
 }
 
 // AI Response Logic
@@ -169,9 +172,9 @@ function getAIResponse(input) {
   if (isMathOperation(input)) {
     try {
       const result = calculateMath(input);
-      return `The result is: ${result}`;
+      return { message: `The result is: ${result}`, type: "message" };
     } catch (error) {
-      return "Sorry, I couldn't process that math calculation.";
+      return { message: "Sorry, I couldn't process that math calculation.", type: "message" };
     }
   }
 
@@ -179,10 +182,10 @@ function getAIResponse(input) {
   if (input.startsWith("search for") || input.startsWith("find")) {
     const query = input.replace("search for", "").replace("find", "").trim();
     const searchURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-    return `Here are the search results for "${query}": ${searchURL}`;
+    return { message: `Redirecting to Google for "${query}"...`, type: "redirect", url: searchURL };
   }
 
-  return "I'm sorry, I didn't understand that. You can ask me to do math calculations or search the web.";
+  return { message: "I'm sorry, I didn't understand that. You can ask me to do math calculations or search the web.", type: "message" };
 }
 
 // Check if the input is a math operation
