@@ -5,84 +5,124 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Snipsearch AI</title>
   <link rel="stylesheet" href="style.css">
-<style type="text/css" id="dcoder_stylesheet">body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
+<style type="text/css" id="dcoder_stylesheet">/* General Styles */
+body {
   margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
+/* Chat Container */
 .chat-container {
-  width: 400px;
-  height: 600px;
-  background-color: #fff;
+  width: 100%;
+  max-width: 480px;
+  height: 90%;
+  background-color: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
+/* Chat Box */
 #chat-box {
   flex: 1;
-  padding: 20px;
+  padding: 10px;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  background-color: #e9ecef;
 }
 
 .chat-message {
-  padding: 10px 15px;
-  border-radius: 10px;
-  max-width: 75%;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 80%;
 }
 
-.bot {
-  background-color: #eceff1;
+.chat-message.bot {
+  background-color: #007bff;
+  color: white;
   align-self: flex-start;
 }
 
-.user {
-  background-color: #4caf50;
-  color: white;
+.chat-message.user {
+  background-color: #f1f1f1;
+  color: black;
   align-self: flex-end;
 }
 
+/* Chat Input */
 .chat-input {
   display: flex;
+  padding: 10px;
+  background-color: #f8f9fa;
   border-top: 1px solid #ddd;
 }
 
-#user-input {
+.chat-input input {
   flex: 1;
-  border: none;
   padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   font-size: 16px;
 }
 
-#send-btn {
-  background-color: #4caf50;
-  color: white;
+.chat-input button {
+  margin-left: 10px;
+  padding: 10px 15px;
   border: none;
-  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-#send-btn:hover {
-  background-color: #45a049;
+.chat-input button:hover {
+  background-color: #0056b3;
+}
+
+/* Scrollbar Styling */
+#chat-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+#chat-box::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+#chat-box::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .chat-container {
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .chat-input input {
+    font-size: 14px;
+  }
+
+  .chat-input button {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
 }</style></head>
 <body>
   <div class="chat-container">
     <div id="chat-box">
       <!-- Initial Message from AI -->
       <div class="chat-message bot">
-        Welcome to Snipsearch AI! This AI tool is in development. Right now, you can only do math calculations. 
-        More features will be added in the future. Thanks for using!
+        Welcome to Snipsearch AI! This AI tool is in development. You can do advanced math calculations and perform web searches. Thanks for using!
       </div>
     </div>
     <div class="chat-input">
@@ -96,46 +136,129 @@
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-// Function to add a message to the chat
-function addMessage(message, sender) {
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("chat-message", sender);
-  messageDiv.textContent = message;
-  chatBox.appendChild(messageDiv);
-  chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+// Function to add a message to the chatbox
+function addMessage(sender, message) {
+  const messageElement = document.createElement("div");
+  messageElement.classList.add("chat-message", sender);
+  messageElement.textContent = message;
+  chatBox.appendChild(messageElement);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Function to handle user input
-async function handleUserInput() {
-  const userText = userInput.value.trim();
-  if (userText === "") return;
+// Handle user input
+function handleUserInput(input) {
+  if (input.trim() === "") {
+    return;
+  }
 
-  // Add user's message to chat
-  addMessage(userText, "user");
+  // Add user's message to the chatbox
+  addMessage("user", input);
 
-  // Call the Python script and get a response
-  const { exec } = require("child_process");
-  exec(`python3 snipsearch_ai.py`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`Stderr: ${stderr}`);
-      return;
-    }
+  // Process the input
+  const response = getAIResponse(input);
 
-    // Add bot's response to chat
-    addMessage(stdout.trim(), "bot");
-  });
-
-  userInput.value = ""; // Clear input field
+  // Add AI's response to the chatbox
+  addMessage("bot", response);
 }
 
-// Event listener for the send button
-sendBtn.addEventListener("click", handleUserInput);
+// AI Response Logic
+function getAIResponse(input) {
+  input = input.toLowerCase().trim();
 
-// Allow pressing Enter to send a message
+  // Check for math calculations
+  if (isMathOperation(input)) {
+    try {
+      const result = calculateMath(input);
+      return `The result is: ${result}`;
+    } catch (error) {
+      return "Sorry, I couldn't process that math calculation.";
+    }
+  }
+
+  // Check for web search
+  if (input.startsWith("search for") || input.startsWith("find")) {
+    const query = input.replace("search for", "").replace("find", "").trim();
+    const searchURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    return `Here are the search results for "${query}": ${searchURL}`;
+  }
+
+  return "I'm sorry, I didn't understand that. You can ask me to do math calculations or search the web.";
+}
+
+// Check if the input is a math operation
+function isMathOperation(input) {
+  const mathKeywords = ["sqrt", "^", "sin", "cos", "tan", "log", "ln", "!"];
+  return (
+    mathKeywords.some((keyword) => input.includes(keyword)) ||
+    /^[\d\s+\-*/().^]+$/.test(input)
+  );
+}
+
+// Perform math calculations
+function calculateMath(input) {
+  // Handle square root
+  if (input.includes("sqrt")) {
+    const number = parseFloat(input.replace("sqrt", "").replace("(", "").replace(")", ""));
+    return Math.sqrt(number);
+  }
+
+  // Handle exponentiation
+  if (input.includes("^")) {
+    const [base, exponent] = input.split("^").map(Number);
+    return Math.pow(base, exponent);
+  }
+
+  // Handle trigonometric functions
+  if (input.includes("sin")) {
+    const angle = parseFloat(input.replace("sin", "").replace("(", "").replace(")", ""));
+    return Math.sin((angle * Math.PI) / 180);
+  }
+  if (input.includes("cos")) {
+    const angle = parseFloat(input.replace("cos", "").replace("(", "").replace(")", ""));
+    return Math.cos((angle * Math.PI) / 180);
+  }
+  if (input.includes("tan")) {
+    const angle = parseFloat(input.replace("tan", "").replace("(", "").replace(")", ""));
+    return Math.tan((angle * Math.PI) / 180);
+  }
+
+  // Handle logarithms
+  if (input.includes("log")) {
+    const number = parseFloat(input.replace("log", "").replace("(", "").replace(")", ""));
+    return Math.log10(number);
+  }
+  if (input.includes("ln")) {
+    const number = parseFloat(input.replace("ln", "").replace("(", "").replace(")", ""));
+    return Math.log(number);
+  }
+
+  // Handle factorial
+  if (input.includes("!")) {
+    const number = parseInt(input.replace("!", ""));
+    if (number < 0) return "Factorial of negative numbers is undefined.";
+    let factorial = 1;
+    for (let i = 1; i <= number; i++) {
+      factorial *= i;
+    }
+    return factorial;
+  }
+
+  // Basic arithmetic using eval
+  return eval(input);
+}
+
+// Handle button click
+sendBtn.addEventListener("click", () => {
+  const input = userInput.value;
+  handleUserInput(input);
+  userInput.value = "";
+});
+
+// Handle Enter key
 userInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") handleUserInput();
+  if (e.key === "Enter") {
+    const input = userInput.value;
+    handleUserInput(input);
+    userInput.value = "";
+  }
 });</script></body></html>
