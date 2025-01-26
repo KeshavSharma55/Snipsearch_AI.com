@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snipsearch AI</title>
+  <link rel="stylesheet" href="style.css">
+<style type="text/css" id="dcoder_stylesheet">body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.chat-container {
+  width: 400px;
+  height: 600px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#chat-box {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-message {
+  padding: 10px 15px;
+  border-radius: 10px;
+  max-width: 75%;
+}
+
+.bot {
+  background-color: #eceff1;
+  align-self: flex-start;
+}
+
+.user {
+  background-color: #4caf50;
+  color: white;
+  align-self: flex-end;
+}
+
+.chat-input {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+#user-input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+}
+
+#send-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#send-btn:hover {
+  background-color: #45a049;
+}</style></head>
+<body>
+  <div class="chat-container">
+    <div id="chat-box">
+      <!-- Initial Message from AI -->
+      <div class="chat-message bot">
+        Welcome to Snipsearch AI! This AI tool is in development. Right now, you can only do math calculations. 
+        More features will be added in the future. Thanks for using!
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="user-input" placeholder="Type your message here...">
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+
+<script type="text/javascript" id="dcoder_script">const chatBox = document.getElementById("chat-box");
+const userInput = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
+
+// Function to add a message to the chat
+function addMessage(message, sender) {
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("chat-message", sender);
+  messageDiv.textContent = message;
+  chatBox.appendChild(messageDiv);
+  chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+}
+
+// Function to handle user input
+async function handleUserInput() {
+  const userText = userInput.value.trim();
+  if (userText === "") return;
+
+  // Add user's message to chat
+  addMessage(userText, "user");
+
+  // Call the Python script and get a response
+  const { exec } = require("child_process");
+  exec(`python3 snipsearch_ai.py`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`Stderr: ${stderr}`);
+      return;
+    }
+
+    // Add bot's response to chat
+    addMessage(stdout.trim(), "bot");
+  });
+
+  userInput.value = ""; // Clear input field
+}
+
+// Event listener for the send button
+sendBtn.addEventListener("click", handleUserInput);
+
+// Allow pressing Enter to send a message
+userInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") handleUserInput();
+});</script></body></html>
