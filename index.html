@@ -134,32 +134,30 @@ body {
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-// Function to add a message to the chatbox
+// Function to add messages
 function addMessage(sender, message) {
   const messageElement = document.createElement("div");
   messageElement.classList.add("chat-message", sender);
   messageElement.textContent = message;
   chatBox.appendChild(messageElement);
   chatBox.scrollTop = chatBox.scrollHeight;
+
+  // Voice response for AI messages
+  if (sender === "bot") {
+    speakText(message);
+  }
 }
 
 // Handle user input
 function handleUserInput(input) {
-  if (input.trim() === "") {
-    return;
-  }
+  if (input.trim() === "") return;
 
-  // Add user's message to the chatbox
   addMessage("user", input);
-
-  // Process the input
   const response = getAIResponse(input);
 
-  // If response is a web search, redirect user to Google
   if (response.type === "redirect") {
-    window.open(response.url, "_blank"); // Open the search in a new tab
+    window.open(response.url, "_blank");
   } else {
-    // Otherwise, add the AI response to the chatbox
     addMessage("bot", response.message);
   }
 }
@@ -168,7 +166,7 @@ function handleUserInput(input) {
 function getAIResponse(input) {
   input = input.toLowerCase().trim();
 
-  // Check for math calculations
+  // Math Calculations
   if (isMathOperation(input)) {
     try {
       const result = calculateMath(input);
@@ -178,76 +176,80 @@ function getAIResponse(input) {
     }
   }
 
-  // Check for web search
+  // Web Search
   if (input.startsWith("search for") || input.startsWith("find")) {
     const query = input.replace("search for", "").replace("find", "").trim();
     const searchURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-    return { message: `Redirecting to Google for "${query}"...`, type: "redirect", url: searchURL };
+    return { message: `Searching Google for "${query}"...`, type: "redirect", url: searchURL };
   }
 
-  return { message: "I'm sorry, I didn't understand that. You can ask me to do math calculations or search the web.", type: "message" };
+  // Weather Information (Basic Example)
+  if (input.includes("weather") || input.includes("temperature")) {
+    return { message: "Fetching live weather data...", type: "redirect", url: `https://www.google.com/search?q=${encodeURIComponent(input)}` };
+  }
+
+  // Jokes
+  if (input.includes("joke")) {
+    return { message: getRandomJoke(), type: "message" };
+  }
+
+  // Fun Facts
+  if (input.includes("fact")) {
+    return { message: getRandomFact(), type: "message" };
+  }
+
+  // Date & Time
+  if (input.includes("date")) {
+    return { message: `Today's date is: ${new Date().toLocaleDateString()}`, type: "message" };
+  }
+  if (input.includes("time")) {
+    return { message: `Current time is: ${new Date().toLocaleTimeString()}`, type: "message" };
+  }
+
+  return { message: "I'm still learning! You can ask me to do math, search the web, or tell you a joke.", type: "message" };
 }
 
-// Check if the input is a math operation
+// Math Operation Checker
 function isMathOperation(input) {
   const mathKeywords = ["sqrt", "^", "sin", "cos", "tan", "log", "ln", "!"];
-  return (
-    mathKeywords.some((keyword) => input.includes(keyword)) ||
-    /^[\d\s+\-*/().^]+$/.test(input)
-  );
+  return mathKeywords.some(keyword => input.includes(keyword)) || /^[\d\s+\-*/().^]+$/.test(input);
 }
 
-// Perform math calculations
+// Perform Math Calculations
 function calculateMath(input) {
-  // Handle square root
-  if (input.includes("sqrt")) {
-    const number = parseFloat(input.replace("sqrt", "").replace("(", "").replace(")", ""));
-    return Math.sqrt(number);
+  try {
+    return eval(input);
+  } catch (error) {
+    return "Invalid expression.";
   }
+}
 
-  // Handle exponentiation
-  if (input.includes("^")) {
-    const [base, exponent] = input.split("^").map(Number);
-    return Math.pow(base, exponent);
-  }
+// Get Random Jokes
+function getRandomJoke() {
+  const jokes = [
+    "Why don’t scientists trust atoms? Because they make up everything!",
+    "Parallel lines have so much in common. It’s a shame they’ll never meet.",
+    "Why was the math book sad? Because it had too many problems!"
+  ];
+  return jokes[Math.floor(Math.random() * jokes.length)];
+}
 
-  // Handle trigonometric functions
-  if (input.includes("sin")) {
-    const angle = parseFloat(input.replace("sin", "").replace("(", "").replace(")", ""));
-    return Math.sin((angle * Math.PI) / 180);
-  }
-  if (input.includes("cos")) {
-    const angle = parseFloat(input.replace("cos", "").replace("(", "").replace(")", ""));
-    return Math.cos((angle * Math.PI) / 180);
-  }
-  if (input.includes("tan")) {
-    const angle = parseFloat(input.replace("tan", "").replace("(", "").replace(")", ""));
-    return Math.tan((angle * Math.PI) / 180);
-  }
+// Get Random Facts
+function getRandomFact() {
+  const facts = [
+    "Did you know? Honey never spoils.",
+    "A day on Venus is longer than a year on Venus!",
+    "Octopuses have three hearts!"
+  ];
+  return facts[Math.floor(Math.random() * facts.length)];
+}
 
-  // Handle logarithms
-  if (input.includes("log")) {
-    const number = parseFloat(input.replace("log", "").replace("(", "").replace(")", ""));
-    return Math.log10(number);
-  }
-  if (input.includes("ln")) {
-    const number = parseFloat(input.replace("ln", "").replace("(", "").replace(")", ""));
-    return Math.log(number);
-  }
-
-  // Handle factorial
-  if (input.includes("!")) {
-    const number = parseInt(input.replace("!", ""));
-    if (number < 0) return "Factorial of negative numbers is undefined.";
-    let factorial = 1;
-    for (let i = 1; i <= number; i++) {
-      factorial *= i;
-    }
-    return factorial;
-  }
-
-  // Basic arithmetic using eval
-  return eval(input);
+// Voice Output (Text-to-Speech)
+function speakText(text) {
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.rate = 1;
+  speech.pitch = 1;
+  window.speechSynthesis.speak(speech);
 }
 
 // Handle button click
