@@ -15,6 +15,31 @@
     margin: 0;
 }
 
+/* 🔹 Home Screen */
+.home-container {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.home-container h1 {
+    color: #007bff;
+}
+
+#start-chat-btn {
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 🔹 Chatbot */
 .chat-container {
     width: 90%;
     max-width: 400px;
@@ -78,16 +103,21 @@ button {
     color: gray;
     border-top: 1px solid #ddd;
 }</style></head> 
- <body> 
-  <div class="chat-container"> 
-   <div id="chat-box" class="chat-box"> 
-    <div class="chat-message bot">
-     Welcome to Snipsearch AI. This AI tool is in development now You can do Math calculations and search the web.
-    </div> 
-   </div> <!-- Advertisement Panel --> 
+ <body> <!-- 🔹 Home Screen --> 
+  <div id="home-screen" class="home-container"> 
+   <h1>Welcome to Snipsearch AI</h1> 
+   <p>Snipsearch AI is an intelligent chatbot that can perform advanced math calculations, fetch live news, search the web, and provide useful answers.</p> <!-- Start Chat Button --> <button id="start-chat-btn">Chat with Snipsearch AI</button> <!-- Advertisement Panel --> 
    <div class="ad-panel"> 
     <p>Advertisement</p> 
     <script type="text/javascript" src="//pl25776521.profitablecpmrate.com/78/02/8a/78028a501ffab8369bde4a0f077e46b7.js"></script> 
+   </div> 
+  </div> <!-- 🔹 Chatbot Screen (Initially Hidden) --> 
+  <div id="chat-container" class="chat-container" style="display: none;"> 
+   <div id="chat-box" class="chat-box"> 
+    <div class="chat-message bot">
+     Welcome to Snipsearch AI, This AI tool is in development now you can only do Maths calculations and search the web and wikipedia.
+     For Ex- "Search for Python","2+2", Today's Weather 
+    </div> 
    </div> 
    <div class="input-container"> 
     <input type="text" id="user-input" placeholder="Type your message here..."> <button id="send-btn">Send</button> 
@@ -95,140 +125,81 @@ button {
   </div> 
   <script src="script.js"></script> 
  
-<script type="text/javascript" id="dcoder_script">const chatBox = document.getElementById("chat-box");
+<script type="text/javascript" id="dcoder_script">const homeScreen = document.getElementById("home-screen");
+const chatContainer = document.getElementById("chat-container");
+const startChatBtn = document.getElementById("start-chat-btn");
+const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
+// Show Chatbot when button is clicked
+startChatBtn.addEventListener("click", () => {
+    homeScreen.style.display = "none";
+    chatContainer.style.display = "block";
+});
+
 // Function to add messages
 function addMessage(sender, message) {
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("chat-message", sender);
-  messageElement.textContent = message;
-  chatBox.appendChild(messageElement);
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  // Voice response for AI messages
-  if (sender === "bot") {
-    speakText(message);
-  }
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("chat-message", sender);
+    messageElement.textContent = message;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 // Handle user input
 function handleUserInput(input) {
-  if (input.trim() === "") return;
+    if (input.trim() === "") return;
 
-  addMessage("user", input);
-  const response = getAIResponse(input);
+    addMessage("user", input);
+    const response = getAIResponse(input);
 
-  if (response.type === "redirect") {
-    window.open(response.url, "_blank");
-  } else {
-    addMessage("bot", response.message);
-  }
+    if (response.type === "redirect") {
+        window.open(response.url, "_blank");
+    } else {
+        addMessage("bot", response.message);
+    }
 }
 
 // AI Response Logic
 function getAIResponse(input) {
-  input = input.toLowerCase().trim();
+    input = input.toLowerCase().trim();
 
-  // Math Calculations
-  if (isMathOperation(input)) {
-    try {
-      const result = calculateMath(input);
-      return { message: `The result is: ${result}`, type: "message" };
-    } catch (error) {
-      return { message: "Sorry, I couldn't process that math calculation.", type: "message" };
+    // Math Calculations
+    if (!isNaN(eval(input))) {
+        return { message: `The result is: ${eval(input)}`, type: "message" };
     }
-  }
 
-  // Web Search
-  if (input.startsWith("search for") || input.startsWith("find")) {
-    const query = input.replace("search for", "").replace("find", "").trim();
-    const searchURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-    return { message: `Searching Google for "${query}"...`, type: "redirect", url: searchURL };
-  }
+    // Wikipedia Search
+    if (input.startsWith("wiki")) {
+        const query = input.replace("wiki", "").trim();
+        return { message: `Searching Wikipedia for "${query}"...`, type: "redirect", url: `https://en.wikipedia.org/wiki/${encodeURIComponent(query)}` };
+    }
 
-  // Weather Information (Basic Example)
-  if (input.includes("weather") || input.includes("temperature")) {
-    return { message: "Fetching live weather data...", type: "redirect", url: `https://www.google.com/search?q=${encodeURIComponent(input)}` };
-  }
+    // News Search
+    if (input.includes("news")) {
+        return { message: "Fetching latest news...", type: "redirect", url: "https://news.google.com/" };
+    }
 
-  // Jokes
-  if (input.includes("joke")) {
-    return { message: getRandomJoke(), type: "message" };
-  }
+    // Greetings
+    if (input.includes("hello") || input.includes("hi")) {
+        return { message: "Hello! How can I assist you today?", type: "message" };
+    }
 
-  // Fun Facts
-  if (input.includes("fact")) {
-    return { message: getRandomFact(), type: "message" };
-  }
-
-  // Date & Time
-  if (input.includes("date")) {
-    return { message: `Today's date is: ${new Date().toLocaleDateString()}`, type: "message" };
-  }
-  if (input.includes("time")) {
-    return { message: `Current time is: ${new Date().toLocaleTimeString()}`, type: "message" };
-  }
-
-  return { message: "I'm still learning! You can ask me to do math, search the web, or tell you a joke.", type: "message" };
-}
-
-// Math Operation Checker
-function isMathOperation(input) {
-  const mathKeywords = ["sqrt", "^", "sin", "cos", "tan", "log", "ln", "!"];
-  return mathKeywords.some(keyword => input.includes(keyword)) || /^[\d\s+\-*/().^]+$/.test(input);
-}
-
-// Perform Math Calculations
-function calculateMath(input) {
-  try {
-    return eval(input);
-  } catch (error) {
-    return "Invalid expression.";
-  }
-}
-
-// Get Random Jokes
-function getRandomJoke() {
-  const jokes = [
-    "Why don’t scientists trust atoms? Because they make up everything!",
-    "Parallel lines have so much in common. It’s a shame they’ll never meet.",
-    "Why was the math book sad? Because it had too many problems!"
-  ];
-  return jokes[Math.floor(Math.random() * jokes.length)];
-}
-
-// Get Random Facts
-function getRandomFact() {
-  const facts = [
-    "Did you know? Honey never spoils.",
-    "A day on Venus is longer than a year on Venus!",
-    "Octopuses have three hearts!"
-  ];
-  return facts[Math.floor(Math.random() * facts.length)];
-}
-
-// Voice Output (Text-to-Speech)
-function speakText(text) {
-  const speech = new SpeechSynthesisUtterance(text);
-  speech.rate = 1;
-  speech.pitch = 1;
-  window.speechSynthesis.speak(speech);
+    // Default Response
+    return { message: "I'm still learning! You can ask me to do math, search Wikipedia, or fetch news.", type: "message" };
 }
 
 // Handle button click
 sendBtn.addEventListener("click", () => {
-  const input = userInput.value;
-  handleUserInput(input);
-  userInput.value = "";
+    handleUserInput(userInput.value);
+    userInput.value = "";
 });
 
 // Handle Enter key
 userInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    const input = userInput.value;
-    handleUserInput(input);
-    userInput.value = "";
-  }
+    if (e.key === "Enter") {
+        handleUserInput(userInput.value);
+        userInput.value = "";
+    }
 });</script></body></html>
