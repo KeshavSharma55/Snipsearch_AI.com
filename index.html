@@ -5,126 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <title>Snipsearch AI</title> 
   <link rel="stylesheet" href="style.css"> 
- <style type="text/css" id="dcoder_stylesheet">/* General Styles */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+ <style type="text/css" id="dcoder_stylesheet">body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-/* Chat Container */
 .chat-container {
-  width: 100%;
-  max-width: 480px;
-  height: 90%;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+    width: 90%;
+    max-width: 400px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Chat Box */
-#chat-box {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-  background-color: #e9ecef;
+.chat-box {
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }
 
 .chat-message {
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 80%;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
 }
 
-.chat-message.bot {
-  background-color: #007bff;
-  color: white;
-  align-self: flex-start;
+.bot {
+    background-color: #007bff;
+    color: white;
 }
 
-.chat-message.user {
-  background-color: #f1f1f1;
-  color: black;
-  align-self: flex-end;
+.user {
+    background-color: #ddd;
 }
 
-/* Chat Input */
-.chat-input {
-  display: flex;
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-top: 1px solid #ddd;
+.input-container {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
 }
 
-.chat-input input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.chat-input button {
-  margin-left: 10px;
-  padding: 10px 15px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
+button {
+    padding: 10px;
+    margin-left: 5px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.chat-input button:hover {
-  background-color: #0056b3;
-}
-
-/* Scrollbar Styling */
-#chat-box::-webkit-scrollbar {
-  width: 8px;
-}
-
-#chat-box::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-}
-
-#chat-box::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-/* Responsive Design */
-@media (max-width: 480px) {
-  .chat-container {
-    height: 100%;
-    border-radius: 0;
-  }
-
-  .chat-input input {
+/* 🔹 Advertisement Panel */
+.ad-panel {
+    text-align: center;
+    padding: 10px;
+    background: #f9f9f9;
     font-size: 14px;
-  }
-
-  .chat-input button {
-    font-size: 14px;
-    padding: 8px 10px;
-  }
+    color: gray;
+    border-top: 1px solid #ddd;
 }</style></head> 
  <body> 
   <div class="chat-container"> 
-   <div id="chat-box"> <!-- Initial Message from AI --> 
+   <div id="chat-box" class="chat-box"> 
     <div class="chat-message bot">
-      Welcome to Snipsearch AI! This AI tool is in development. You can do advanced math calculations and perform web searches. Thanks for using! 
+     Welcome to Snipsearch AI. This AI tool is in development now You can do Math calculations and search the web.
     </div> 
+   </div> <!-- Advertisement Panel --> 
+   <div class="ad-panel"> 
+    <p>Advertisement</p> 
+    <script type="text/javascript" src="//pl25776521.profitablecpmrate.com/78/02/8a/78028a501ffab8369bde4a0f077e46b7.js"></script> 
    </div> 
-   <div class="chat-input"> 
+   <div class="input-container"> 
     <input type="text" id="user-input" placeholder="Type your message here..."> <button id="send-btn">Send</button> 
    </div> 
   </div> 
