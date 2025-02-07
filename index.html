@@ -3,11 +3,11 @@
  <head> 
   <meta charset="UTF-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <title>Snipsearch AI</title> 
+  <title>Snipsearch AI - Index Model</title> 
   <link rel="stylesheet" href="style.css"> 
  <style type="text/css" id="dcoder_stylesheet">body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #e3f2fd;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,31 +15,6 @@
     margin: 0;
 }
 
-/* 🔹 Home Screen */
-.home-container {
-    text-align: center;
-    background: white;
-    padding: 20px;
-    width: 90%;
-    max-width: 400px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-}
-
-.home-container h1 {
-    color: #007bff;
-}
-
-#start-chat-btn {
-    padding: 10px 15px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* 🔹 Chatbot */
 .chat-container {
     width: 90%;
     max-width: 400px;
@@ -47,6 +22,14 @@
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.intro {
+    background: #007bff;
+    color: white;
+    padding: 15px;
+    font-size: 14px;
 }
 
 .chat-box {
@@ -54,21 +37,25 @@
     overflow-y: auto;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    text-align: left;
 }
 
 .chat-message {
     padding: 10px;
     margin: 5px;
     border-radius: 5px;
+    width: fit-content;
 }
 
 .bot {
     background-color: #007bff;
     color: white;
+    align-self: flex-start;
 }
 
 .user {
     background-color: #ddd;
+    align-self: flex-end;
 }
 
 .input-container {
@@ -94,7 +81,18 @@ button {
     cursor: pointer;
 }
 
-/* 🔹 Advertisement Panel */
+/* Voice Button */
+.voice-btn {
+    background: #ff4081;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+/* Advertisement Panel */
 .ad-panel {
     text-align: center;
     padding: 10px;
@@ -103,40 +101,30 @@ button {
     color: gray;
     border-top: 1px solid #ddd;
 }</style></head> 
- <body> <!-- 🔹 Home Screen --> 
-  <div id="home-screen" class="home-container"> 
-   <h1>Welcome to Snipsearch AI</h1> 
-   <p>Snipsearch AI is an intelligent chatbot that can perform advanced math calculations, fetch live news, search the web, and provide useful answers.</p> <!-- Start Chat Button --> <button id="start-chat-btn">Chat with Snipsearch AI</button> <!-- Advertisement Panel --> 
+ <body> 
+  <div class="chat-container"> <!-- AI Introduction --> 
+   <div class="intro"> 
+    <h2>Welcome to Snipsearch AI</h2> 
+    <p>This is the **Index Model** of Snipsearch AI. You can ask me anything, perform math calculations, or search the web.</p> 
+   </div> 
+   <div id="chat-box" class="chat-box"> 
+    <div class="chat-message bot">
+     Hello! I am Snipsearch AI. How can I help you today?
+    </div> 
+   </div> <!-- Advertisement Panel --> 
    <div class="ad-panel"> 
     <p>Advertisement</p> 
     <script type="text/javascript" src="//pl25776521.profitablecpmrate.com/78/02/8a/78028a501ffab8369bde4a0f077e46b7.js"></script> 
    </div> 
-  </div> <!-- 🔹 Chatbot Screen (Initially Hidden) --> 
-  <div id="chat-container" class="chat-container" style="display: none;"> 
-   <div id="chat-box" class="chat-box"> 
-    <div class="chat-message bot">
-     Welcome to Snipsearch AI, This AI tool is in development now you can only do Maths calculations and search the web and wikipedia.
-     For Ex- "Search for Python","2+2", Today's Weather 
-    </div> 
-   </div> 
    <div class="input-container"> 
-    <input type="text" id="user-input" placeholder="Type your message here..."> <button id="send-btn">Send</button> 
+    <input type="text" id="user-input" placeholder="Type your question here..."> <button id="send-btn">Send</button> 
    </div> 
   </div> 
   <script src="script.js"></script> 
  
-<script type="text/javascript" id="dcoder_script">const homeScreen = document.getElementById("home-screen");
-const chatContainer = document.getElementById("chat-container");
-const startChatBtn = document.getElementById("start-chat-btn");
-const chatBox = document.getElementById("chat-box");
+<script type="text/javascript" id="dcoder_script">const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
-
-// Show Chatbot when button is clicked
-startChatBtn.addEventListener("click", () => {
-    homeScreen.style.display = "none";
-    chatContainer.style.display = "block";
-});
 
 // Function to add messages
 function addMessage(sender, message) {
@@ -148,11 +136,11 @@ function addMessage(sender, message) {
 }
 
 // Handle user input
-function handleUserInput(input) {
+async function handleUserInput(input) {
     if (input.trim() === "") return;
 
     addMessage("user", input);
-    const response = getAIResponse(input);
+    const response = await getAIResponse(input);
 
     if (response.type === "redirect") {
         window.open(response.url, "_blank");
@@ -162,44 +150,110 @@ function handleUserInput(input) {
 }
 
 // AI Response Logic
-function getAIResponse(input) {
+async function getAIResponse(input) {
     input = input.toLowerCase().trim();
 
+    // General Knowledge & FAQ
+    const knowledgeBase = {
+        "who is the president of usa": "The President of the USA is Joe Biden.",
+        "what is the capital of france": "The capital of France is Paris.",
+        "who invented the light bulb": "The light bulb was invented by Thomas Edison.",
+        "what is the largest planet": "The largest planet in our Solar System is Jupiter.",
+        "who discovered gravity": "Gravity was discovered by Sir Isaac Newton."
+    };
+
+    if (knowledgeBase[input]) {
+        return { message: knowledgeBase[input], type: "message" };
+    }
+
+    // Wikipedia Search API
+    if (input.startsWith("what is") || input.startsWith("who is") || input.startsWith("tell me about")) {
+        return await fetchWikipediaSummary(input.replace(/(what is|who is|tell me about)/, "").trim());
+    }
+
     // Math Calculations
-    if (!isNaN(eval(input))) {
-        return { message: `The result is: ${eval(input)}`, type: "message" };
+    if (isMathOperation(input)) {
+        try {
+            const result = calculateMath(input);
+            return { message: `The result is: ${result}`, type: "message" };
+        } catch (error) {
+            return { message: "Invalid math expression.", type: "message" };
+        }
     }
 
-    // Wikipedia Search
-    if (input.startsWith("wiki")) {
-        const query = input.replace("wiki", "").trim();
-        return { message: `Searching Wikipedia for "${query}"...`, type: "redirect", url: `https://en.wikipedia.org/wiki/${encodeURIComponent(query)}` };
+    // Web Search
+    if (input.startsWith("search for") || input.startsWith("find")) {
+        const query = input.replace("search for", "").replace("find", "").trim();
+        const searchURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        return { message: `Searching Google for "${query}"...`, type: "redirect", url: searchURL };
     }
 
-    // News Search
-    if (input.includes("news")) {
-        return { message: "Fetching latest news...", type: "redirect", url: "https://news.google.com/" };
+    return { message: "I'm still learning! Ask me anything about general knowledge, math, or search the web.", type: "message" };
+}
+
+// Wikipedia API Fetch Function
+async function fetchWikipediaSummary(query) {
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.extract) {
+            return { message: data.extract, type: "message" };
+        } else {
+            return { message: "I couldn't find information on that topic.", type: "message" };
+        }
+    } catch (error) {
+        return { message: "Error fetching data from Wikipedia.", type: "message" };
+    }
+}
+
+// Math Operation Checker
+function isMathOperation(input) {
+    const mathKeywords = ["sqrt", "^", "sin", "cos", "tan", "log", "!"];
+    return mathKeywords.some(keyword => input.includes(keyword)) || /^[\d\s+\-*/().^]+$/.test(input);
+}
+
+// Perform Math Calculations
+function calculateMath(input) {
+    try {
+        return eval(input);
+    } catch (error) {
+        return "Invalid expression.";
+    }
+}
+
+// Voice Recognition
+function startSpeechRecognition() {
+    if (!("webkitSpeechRecognition" in window)) {
+        alert("Speech recognition is not supported in this browser.");
+        return;
     }
 
-    // Greetings
-    if (input.includes("hello") || input.includes("hi")) {
-        return { message: "Hello! How can I assist you today?", type: "message" };
-    }
+    const recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.lang = "en-US";
 
-    // Default Response
-    return { message: "I'm still learning! You can ask me to do math, search Wikipedia, or fetch news.", type: "message" };
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        userInput.value = transcript;
+        handleUserInput(transcript);
+    };
+
+    recognition.start();
 }
 
 // Handle button click
 sendBtn.addEventListener("click", () => {
-    handleUserInput(userInput.value);
+    const input = userInput.value;
+    handleUserInput(input);
     userInput.value = "";
 });
 
 // Handle Enter key
 userInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
-        handleUserInput(userInput.value);
+        const input = userInput.value;
+        handleUserInput(input);
         userInput.value = "";
     }
 });</script></body></html>
