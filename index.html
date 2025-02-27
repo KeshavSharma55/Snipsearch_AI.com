@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snipsearch AI</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Snipsearch AI Chatbot- Index Model</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="chat-container">
-        <div class="chat-header">Snipsearch AI</div>
-        <div class="chat-messages" id="chat-messages"></div>
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="Ask me anything...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
+        <h2>Snipsearch AI - Index Model</h2>
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Ask me anything..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Send</button>
+        <p>This AI Tool is in Development now Please improve it by giving your feedback at ks857243@gmail.com.</p>
     </div>
     <script src="script.js"></script>
 </body>
