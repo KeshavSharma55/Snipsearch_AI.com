@@ -1,10 +1,13 @@
 let chatBox = document.getElementById("chat-box");
 
-// Load AI database
-let aiDatabase = {};
-fetch("database.json")
-    .then(response => response.json())
-    .then(data => aiDatabase = data);
+// AI database (predefined questions & answers)
+let aiDatabase = {
+    "hello": "Hi there! How can I help you?",
+    "who are you": "I am Snipsearch AI, your intelligent assistant!",
+    "what is your name": "My name is Snipsearch AI.",
+    "who created you": "I am created by Keshav Sharma, a Programmer and Founder of Snipsearch AI.",
+    "how are you": "I'm just a bot, but I'm always here to help!"
+};
 
 // Function to display messages
 function addMessage(sender, message) {
@@ -44,7 +47,7 @@ async function searchGoogle(query) {
 
 // Handle user input
 async function sendMessage() {
-    let userInput = document.getElementById("user-input").value.trim();
+    let userInput = document.getElementById("user-input").value.trim().toLowerCase();
     document.getElementById("user-input").value = "";
 
     if (userInput === "") return;
@@ -52,10 +55,8 @@ async function sendMessage() {
     addMessage("You", userInput);
 
     // Check AI database
-    let response = aiDatabase[userInput.toLowerCase()];
-    
-    if (response) {
-        addMessage("Snipsearch AI", response);
+    if (aiDatabase[userInput]) {
+        addMessage("Snipsearch AI", aiDatabase[userInput]);
     } else if (!isNaN(calculateMath(userInput))) {
         addMessage("Snipsearch AI", "Answer: " + calculateMath(userInput));
     } else {
@@ -64,8 +65,15 @@ async function sendMessage() {
         let wikiResult = await searchWikipedia(userInput);
         let googleResult = await searchGoogle(userInput);
 
-        addMessage("Snipsearch AI", `📖 Wikipedia: ${wikiResult}`);
+        addMessage("Snipsearch AI", `📖: ${wikiResult}`);
         addMessage("Snipsearch AI", googleResult);
+
+        // Learn new answers from user
+        let newAnswer = prompt("I don't know the answer. Can you teach me?");
+        if (newAnswer) {
+            aiDatabase[userInput] = newAnswer;
+            addMessage("Snipsearch AI", "Thanks! I've learned a new answer.");
+        }
     }
 }
 
