@@ -1,8 +1,0 @@
-{
-    "hello": "Hi there! How can I help you?",
-    "who are you": "I am Snipsearch AI, your chatbot assistant!",
-    "what is your name": "My name is Snipsearch AI.",
-    "how are you": "I'm just a bot, but I'm always ready to help!",
-    "who created you": "I am created by Keshav Sharma.",
-    "bye": "Goodbye! Have a great day!"
-}
