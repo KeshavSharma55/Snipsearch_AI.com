@@ -1,85 +1,130 @@
-let chatBox = document.getElementById("chat-box");
+// Snipsearch AI - JavaScript Code (Combined Version)
 
-// AI database (predefined questions & answers)
-let aiDatabase = {
-    "hello": "Hi there! How can I help you?",
-    "who are you": "I am Snipsearch AI, your intelligent assistant!",
-    "what is your name": "My name is Snipsearch AI.",
-    "who created you": "I am created by Keshav Sharma, a Programmer and Founder of Snipsearch AI.",
-    "how are you": "I'm just a bot, but I'm always here to help!"
-};
+// Function to send user message
+async function sendMessage() {
+    let inputBox = document.getElementById("user-input");
+    let userText = inputBox.value.trim();
+    if (userText === "") return;
 
-// Function to display messages
-function addMessage(sender, message) {
-    chatBox.innerHTML += `<p><strong>${sender}:</strong> ${message}</p>`;
+    addMessage("User", userText);
+    inputBox.value = "";
+
+    let response = await getBotResponse(userText);
+    addMessage("Snipsearch AI", response);
+}
+
+// Function to display messages in chat
+function addMessage(sender, text) {
+    let chatBox = document.getElementById("chat-box");
+    let msgDiv = document.createElement("div");
+    msgDiv.innerHTML = `<b>${sender}:</b> ${text}`;
+    chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Math calculation function
-function calculateMath(expression) {
-    try {
-        return eval(expression);
-    } catch (error) {
-        return "I can't solve that.";
+// Predefined responses
+const predefinedResponses = {
+    "hello": "Hi! How can I assist you today?",
+    "how are you?": "I'm just a bot, but I'm doing great!",
+    "who created you?": "I was created by Snipsearch Technologies.",
+    "what is your name?": "My name is Snipsearch AI your AI Assistant.",
+    "who are you": "I am Snipsearch AI your AI Assistant.",
+    "what is ai?": "AI stands for Artificial Intelligence, which enables machines to mimic human intelligence."
+};
+
+// Function to process user query
+async function getBotResponse(query) {
+    let response = "";
+
+    // Check for predefined responses
+    if (predefinedResponses[query.toLowerCase()]) {
+        return predefinedResponses[query.toLowerCase()];
     }
-}
 
-// Fetch Wikipedia summary
-async function searchWikipedia(query) {
-    let url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
-    let response = await fetch(url);
-    let data = await response.json();
-    return data.extract ? data.extract : "No Wikipedia summary found.";
-}
-
-// Fetch Google-like search results using DuckDuckGo
-async function searchGoogle(query) {
-    let url = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json`;
-    let response = await fetch(url);
-    let data = await response.json();
-
-    if (data.RelatedTopics.length > 0) {
-        return `🔍 **Top Result:** <a href="${data.RelatedTopics[0].FirstURL}" target="_blank">${data.RelatedTopics[0].Text}</a>`;
-    } else {
-        return "No search results found.";
-    }
-}
-
-// Handle user input
-async function sendMessage() {
-    let userInput = document.getElementById("user-input").value.trim().toLowerCase();
-    document.getElementById("user-input").value = "";
-
-    if (userInput === "") return;
-    
-    addMessage("You", userInput);
-
-    // Check AI database
-    if (aiDatabase[userInput]) {
-        addMessage("Snipsearch AI", aiDatabase[userInput]);
-    } else if (!isNaN(calculateMath(userInput))) {
-        addMessage("Snipsearch AI", "Answer: " + calculateMath(userInput));
-    } else {
-        addMessage("Snipsearch AI", "Searching for information...");
-
-        let wikiResult = await searchWikipedia(userInput);
-        let googleResult = await searchGoogle(userInput);
-
-        addMessage("Snipsearch AI", `📖: ${wikiResult}`);
-        addMessage("Snipsearch AI", googleResult);
-
-        // Learn new answers from user
-        let newAnswer = prompt("I don't know the answer. Can you teach me?");
-        if (newAnswer) {
-            aiDatabase[userInput] = newAnswer;
-            addMessage("Snipsearch AI", "Thanks! I've learned a new answer.");
+    // Check for math calculations
+    if (query.match(/[\d+\-*/()]/)) {
+        try {
+            return "Result: " + evaluateMath(query);
+        } catch (error) {
+            return "Invalid math expression.";
         }
     }
+
+    // Wikipedia search
+    if (query.toLowerCase().startsWith("wikipedia ")) {
+        return await fetchWikipedia(query.replace("wikipedia ", ""));
+    }
+
+    // DuckDuckGo search
+    if (query.toLowerCase().startsWith("search ")) {
+        return await fetchDuckDuckGo(query.replace("search ", ""));
+    }
+
+    // News and Weather
+    if (query.toLowerCase() === "news") {
+        return await fetchGoogleNews();
+    }
+    if (query.toLowerCase().startsWith("weather ")) {
+        return await fetchWeather(query.replace("weather ", ""));
+    }
+
+    return "I'm not sure, but I'm still learning!";
 }
 
-// Handle Enter key press
-function handleKeyPress(event) {
-    if (event.key === "Enter") {
-        sendMessage();
+// Function to evaluate math expressions
+function evaluateMath(expression) {
+    return Function('"use strict"; return (' + expression + ')')();
+}
+
+// Wikipedia API
+async function fetchWikipedia(query) {
+    let url = `https://en.wikipedia.org/api/rest_v1/page/summary/${query}`;
+    let res = await fetch(url);
+    let data = await res.json();
+    return data.extract || "No results found.";
+}
+
+// DuckDuckGo API
+async function fetchDuckDuckGo(query) {
+    let url = `https://api.duckduckgo.com/?q=${query}&format=json`;
+    let res = await fetch(url);
+    let data = await res.json();
+    return data.Abstract || "No results found.";
+}
+
+// Google News Fetch Function (Using RSS Feed)
+async function fetchGoogleNews() {
+    const proxyUrl = "https://api.allorigins.win/get?url=";  // To bypass CORS issues
+    const googleNewsUrl = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en";
+    
+    try {
+        const response = await fetch(proxyUrl + encodeURIComponent(googleNewsUrl));
+        const data = await response.json();
+        
+        // Parsing RSS feed
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+        const items = xmlDoc.querySelectorAll("item");
+        
+        let newsList = "Latest News from Google News:\n";
+        items.forEach((item, index) => {
+            if (index < 5) {  // Limiting to 5 news items
+                const title = item.querySelector("title").textContent;
+                const link = item.querySelector("link").textContent;
+                newsList += `- ${title} (${link})\n`;
+            }
+        });
+        
+        return newsList;
+    } catch (error) {
+        return "Unable to fetch news at the moment.";
     }
+}
+
+// Weather API
+async function fetchWeather(city) {
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=YOUR_WEATHER_API_KEY&units=metric`;
+    let res = await fetch(url);
+    let data = await res.json();
+    return `Weather in ${city}: ${data.weather[0].description}, ${data.main.temp}°C`;
 }
