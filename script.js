@@ -26,9 +26,7 @@ function addMessage(sender, text) {
 const predefinedResponses = {
     "hello": "Hi! How can I assist you today?",
     "how are you?": "I'm just a bot, but I'm doing great!",
-    "who created you?": "I was created by Snipsearch Technologies.",
-    "what is your name?": "My name is Snipsearch AI your AI Assistant.",
-    "who are you": "I am Snipsearch AI your AI Assistant.",
+    "who created you?": "I was created by Copenet Technologies.",
     "what is ai?": "AI stands for Artificial Intelligence, which enables machines to mimic human intelligence."
 };
 
@@ -50,25 +48,10 @@ async function getBotResponse(query) {
         }
     }
 
-    // Wikipedia search
-    if (query.toLowerCase().startsWith("wikipedia ")) {
-        return await fetchWikipedia(query.replace("wikipedia ", ""));
-    }
+    // Search Wikipedia and DuckDuckGo for all queries
+    response = await fetchFromSources(query);
 
-    // DuckDuckGo search
-    if (query.toLowerCase().startsWith("search ")) {
-        return await fetchDuckDuckGo(query.replace("search ", ""));
-    }
-
-    // News and Weather
-    if (query.toLowerCase() === "news") {
-        return await fetchGoogleNews();
-    }
-    if (query.toLowerCase().startsWith("weather ")) {
-        return await fetchWeather(query.replace("weather ", ""));
-    }
-
-    return "I'm not sure, but I'm still learning!";
+    return response || "I'm not sure, but I'm still learning!";
 }
 
 // Function to evaluate math expressions
@@ -76,39 +59,62 @@ function evaluateMath(expression) {
     return Function('"use strict"; return (' + expression + ')')();
 }
 
-// Wikipedia API
+// Wikipedia API Search
 async function fetchWikipedia(query) {
-    let url = `https://en.wikipedia.org/api/rest_v1/page/summary/${query}`;
-    let res = await fetch(url);
-    let data = await res.json();
-    return data.extract || "No results found.";
+    try {
+        let url = `https://en.wikipedia.org/api/rest_v1/page/summary/${query}`;
+        let res = await fetch(url);
+        let data = await res.json();
+        return data.extract || "";
+    } catch (error) {
+        return "";
+    }
 }
 
-// DuckDuckGo API
+// DuckDuckGo API Search
 async function fetchDuckDuckGo(query) {
-    let url = `https://api.duckduckgo.com/?q=${query}&format=json`;
-    let res = await fetch(url);
-    let data = await res.json();
-    return data.Abstract || "No results found.";
+    try {
+        let url = `https://api.duckduckgo.com/?q=${query}&format=json`;
+        let res = await fetch(url);
+        let data = await res.json();
+        return data.Abstract || "";
+    } catch (error) {
+        return "";
+    }
+}
+
+// Combine results from Wikipedia and DuckDuckGo
+async function fetchFromSources(query) {
+    const wikiResult = await fetchWikipedia(query);
+    const duckResult = await fetchDuckDuckGo(query);
+
+    if (wikiResult && duckResult) {
+        return `Wikipedia: ${wikiResult}\n\nDuckDuckGo: ${duckResult}`;
+    } else if (wikiResult) {
+        return `Wikipedia: ${wikiResult}`;
+    } else if (duckResult) {
+        return `DuckDuckGo: ${duckResult}`;
+    } else {
+        return "No relevant information found.";
+    }
 }
 
 // Google News Fetch Function (Using RSS Feed)
 async function fetchGoogleNews() {
-    const proxyUrl = "https://api.allorigins.win/get?url=";  // To bypass CORS issues
+    const proxyUrl = "https://api.allorigins.win/get?url=";
     const googleNewsUrl = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en";
     
     try {
         const response = await fetch(proxyUrl + encodeURIComponent(googleNewsUrl));
         const data = await response.json();
         
-        // Parsing RSS feed
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(data.contents, "text/xml");
         const items = xmlDoc.querySelectorAll("item");
         
         let newsList = "Latest News from Google News:\n";
         items.forEach((item, index) => {
-            if (index < 5) {  // Limiting to 5 news items
+            if (index < 5) {
                 const title = item.querySelector("title").textContent;
                 const link = item.querySelector("link").textContent;
                 newsList += `- ${title} (${link})\n`;
