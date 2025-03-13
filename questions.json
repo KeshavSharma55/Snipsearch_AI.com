@@ -1,0 +1,11 @@
+{
+    "hello": "Hi! How can I assist you today?",
+    "how are you?": "I'm just a bot, but I'm doing great!",
+    "who created you?": "I was created by Copenet Technologies.",
+    "what is ai?": "AI stands for Artificial Intelligence, which enables machines to mimic human intelligence.",
+    "what is machine learning?": "Machine Learning is a subset of AI that allows systems to learn from data and improve over time.",
+    "what is programming?": "Programming is the process of creating instructions for computers using code.",
+    "tell me a joke": "Why did the computer go to the doctor? Because it had a virus!",
+    "what is chatbot?": "A chatbot is a software application used to conduct online chat conversations via text or text-to-speech.",
+    "what is html?": "HTML stands for HyperText Markup Language. It is used to structure content on the web."
+}
