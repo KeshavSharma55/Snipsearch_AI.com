@@ -1,4 +1,27 @@
-// Snipsearch AI - JavaScript Code (Combined Version)
+// Snipsearch AI - JavaScript Code (Fixed URL Fetch Method)
+
+// URL of the external JSON file (Replace with your own URL)
+const jsonURL = "https://raw.githubusercontent.com/YourUsername/YourRepository/main/questions.json";
+
+// Variable to store predefined responses
+let predefinedResponses = {};
+
+// Load predefined questions from JSON file
+async function loadPredefinedQuestions() {
+    try {
+        const response = await fetch(jsonURL, {cache: "no-cache"});
+        if (!response.ok) {
+            throw new Error("Network response was not ok.");
+        }
+        predefinedResponses = await response.json();
+        console.log("Predefined questions loaded successfully.", predefinedResponses);
+    } catch (error) {
+        console.error("Error loading predefined questions:", error);
+    }
+}
+
+// Call the function to load questions
+loadPredefinedQuestions();
 
 // Function to send user message
 async function sendMessage() {
@@ -22,21 +45,14 @@ function addMessage(sender, text) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Predefined responses
-const predefinedResponses = {
-    "hello": "Hi! How can I assist you today?",
-    "how are you?": "I'm just a bot, but I'm doing great!",
-    "who created you?": "I was created by Copenet Technologies.",
-    "what is ai?": "AI stands for Artificial Intelligence, which enables machines to mimic human intelligence."
-};
-
 // Function to process user query
 async function getBotResponse(query) {
     let response = "";
 
-    // Check for predefined responses
-    if (predefinedResponses[query.toLowerCase()]) {
-        return predefinedResponses[query.toLowerCase()];
+    // Check for predefined responses (Case-insensitive search)
+    const lowerCaseQuery = query.toLowerCase();
+    if (predefinedResponses[lowerCaseQuery]) {
+        return predefinedResponses[lowerCaseQuery];
     }
 
     // Check for math calculations
@@ -48,8 +64,8 @@ async function getBotResponse(query) {
         }
     }
 
-    // Search Wikipedia and DuckDuckGo for all queries
-    response = await fetchFromSources(query);
+    // Fetch Data from DuckDuckGo (By Default)
+    response = await fetchDuckDuckGo(query);
 
     return response || "I'm not sure, but I'm still learning!";
 }
@@ -59,78 +75,22 @@ function evaluateMath(expression) {
     return Function('"use strict"; return (' + expression + ')')();
 }
 
-// Wikipedia API Search
-async function fetchWikipedia(query) {
-    try {
-        let url = `https://en.wikipedia.org/api/rest_v1/page/summary/${query}`;
-        let res = await fetch(url);
-        let data = await res.json();
-        return data.extract || "";
-    } catch (error) {
-        return "";
-    }
-}
-
 // DuckDuckGo API Search
 async function fetchDuckDuckGo(query) {
     try {
-        let url = `https://api.duckduckgo.com/?q=${query}&format=json`;
+        let url = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json`;
         let res = await fetch(url);
         let data = await res.json();
-        return data.Abstract || "";
+        
+        if (data.Abstract) {
+            return data.Abstract;
+        } else if (data.RelatedTopics && data.RelatedTopics.length > 0) {
+            let relatedInfo = data.RelatedTopics[0].Text;
+            return relatedInfo ? `DuckDuckGo: ${relatedInfo}` : "No relevant information found.";
+        } else {
+            return "No relevant information found.";
+        }
     } catch (error) {
-        return "";
+        return "Unable to fetch data from DuckDuckGo.";
     }
-}
-
-// Combine results from Wikipedia and DuckDuckGo
-async function fetchFromSources(query) {
-    const wikiResult = await fetchWikipedia(query);
-    const duckResult = await fetchDuckDuckGo(query);
-
-    if (wikiResult && duckResult) {
-        return `Wikipedia: ${wikiResult}\n\nDuckDuckGo: ${duckResult}`;
-    } else if (wikiResult) {
-        return `Snipsearch AI: ${wikiResult}`;
-    } else if (duckResult) {
-        return `Snipsearch AI: ${duckResult}`;
-    } else {
-        return "No relevant information found.";
-    }
-}
-
-// Google News Fetch Function (Using RSS Feed)
-async function fetchGoogleNews() {
-    const proxyUrl = "https://api.allorigins.win/get?url=";
-    const googleNewsUrl = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en";
-    
-    try {
-        const response = await fetch(proxyUrl + encodeURIComponent(googleNewsUrl));
-        const data = await response.json();
-        
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
-        const items = xmlDoc.querySelectorAll("item");
-        
-        let newsList = "Latest News from Google News:\n";
-        items.forEach((item, index) => {
-            if (index < 5) {
-                const title = item.querySelector("title").textContent;
-                const link = item.querySelector("link").textContent;
-                newsList += `- ${title} (${link})\n`;
-            }
-        });
-        
-        return newsList;
-    } catch (error) {
-        return "Unable to fetch news at the moment.";
-    }
-}
-
-// Weather API
-async function fetchWeather(city) {
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=YOUR_WEATHER_API_KEY&units=metric`;
-    let res = await fetch(url);
-    let data = await res.json();
-    return `Weather in ${city}: ${data.weather[0].description}, ${data.main.temp}°C`;
-}
+                                           }
