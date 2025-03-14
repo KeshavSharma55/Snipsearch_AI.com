@@ -1,0 +1,136 @@
+// Snipsearch AI - JavaScript Code (Combined Version)
+
+// Function to send user message
+async function sendMessage() {
+    let inputBox = document.getElementById("user-input");
+    let userText = inputBox.value.trim();
+    if (userText === "") return;
+
+    addMessage("User", userText);
+    inputBox.value = "";
+
+    let response = await getBotResponse(userText);
+    addMessage("Snipsearch AI", response);
+}
+
+// Function to display messages in chat
+function addMessage(sender, text) {
+    let chatBox = document.getElementById("chat-box");
+    let msgDiv = document.createElement("div");
+    msgDiv.innerHTML = `<b>${sender}:</b> ${text}`;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Predefined responses
+const predefinedResponses = {
+    "hello": "Hi! How can I assist you today?",
+    "how are you?": "I'm just a bot, but I'm doing great!",
+    "who created you?": "I was created by Copenet Technologies.",
+    "what is ai?": "AI stands for Artificial Intelligence, which enables machines to mimic human intelligence."
+};
+
+// Function to process user query
+async function getBotResponse(query) {
+    let response = "";
+
+    // Check for predefined responses
+    if (predefinedResponses[query.toLowerCase()]) {
+        return predefinedResponses[query.toLowerCase()];
+    }
+
+    // Check for math calculations
+    if (query.match(/[\d+\-*/()]/)) {
+        try {
+            return "Result: " + evaluateMath(query);
+        } catch (error) {
+            return "Invalid math expression.";
+        }
+    }
+
+    // Search Wikipedia and DuckDuckGo for all queries
+    response = await fetchFromSources(query);
+
+    return response || "I'm not sure, but I'm still learning!";
+}
+
+// Function to evaluate math expressions
+function evaluateMath(expression) {
+    return Function('"use strict"; return (' + expression + ')')();
+}
+
+// Wikipedia API Search
+async function fetchWikipedia(query) {
+    try {
+        let url = `https://en.wikipedia.org/api/rest_v1/page/summary/${query}`;
+        let res = await fetch(url);
+        let data = await res.json();
+        return data.extract || "";
+    } catch (error) {
+        return "";
+    }
+}
+
+// DuckDuckGo API Search
+async function fetchDuckDuckGo(query) {
+    try {
+        let url = `https://api.duckduckgo.com/?q=${query}&format=json`;
+        let res = await fetch(url);
+        let data = await res.json();
+        return data.Abstract || "";
+    } catch (error) {
+        return "";
+    }
+}
+
+// Combine results from Wikipedia and DuckDuckGo
+async function fetchFromSources(query) {
+    const wikiResult = await fetchWikipedia(query);
+    const duckResult = await fetchDuckDuckGo(query);
+
+    if (wikiResult && duckResult) {
+        return `Wikipedia: ${wikiResult}\n\nDuckDuckGo: ${duckResult}`;
+    } else if (wikiResult) {
+        return `Snipsearch AI: ${wikiResult}`;
+    } else if (duckResult) {
+        return `Snipsearch AI: ${duckResult}`;
+    } else {
+        return "No relevant information found.";
+    }
+}
+
+// Google News Fetch Function (Using RSS Feed)
+async function fetchGoogleNews() {
+    const proxyUrl = "https://api.allorigins.win/get?url=";
+    const googleNewsUrl = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en";
+    
+    try {
+        const response = await fetch(proxyUrl + encodeURIComponent(googleNewsUrl));
+        const data = await response.json();
+        
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+        const items = xmlDoc.querySelectorAll("item");
+        
+        let newsList = "Latest News from Google News:\n";
+        items.forEach((item, index) => {
+            if (index < 5) {
+                const title = item.querySelector("title").textContent;
+                const link = item.querySelector("link").textContent;
+                newsList += `- ${title} (${link})\n`;
+            }
+        });
+        
+        return newsList;
+    } catch (error) {
+        return "Unable to fetch news at the moment.";
+    }
+}
+
+// Weather API
+async function fetchWeather(city) {
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=YOUR_WEATHER_API_KEY&units=metric`;
+    let res = await fetch(url);
+    let data = await res.json();
+    return `Weather in ${city}: ${data.weather[0].description}, ${data.main.temp}°C`;
+}
