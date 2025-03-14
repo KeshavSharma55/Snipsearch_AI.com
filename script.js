@@ -1,7 +1,7 @@
 // Snipsearch AI - JavaScript Code (Fixed URL Fetch Method)
 
 // URL of the external JSON file (Replace with your own URL)
-const jsonURL = "https://raw.githubusercontent.com/YourUsername/YourRepository/main/questions.json";
+const jsonURL = "https://raw.githubusercontent.com/KeshavSharma55/Snipsearch_AI.com/refs/heads/main/questions.json";
 
 // Variable to store predefined responses
 let predefinedResponses = {};
