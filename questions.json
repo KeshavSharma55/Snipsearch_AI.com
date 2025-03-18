@@ -5,3 +5,85 @@
     "what is the capital of india?": "The capital of India is New Delhi.",
     "tell me a joke": "Why did the computer go to the doctor? Because it had a virus!"
 }
+{
+    "google.com": {
+        "description": "Google is the world's most popular search engine, enabling users to find information on the web.",
+        "link": "https://www.google.com"
+    },
+    "youtube.com": {
+        "description": "YouTube is a video-sharing platform where users can upload, view, and share videos.",
+        "link": "https://www.youtube.com"
+    },
+    "facebook.com": {
+        "description": "Facebook is a social media network that allows users to connect, share content, and communicate.",
+        "link": "https://www.facebook.com"
+    },
+    "instagram.com": {
+        "description": "Instagram is a photo and video-sharing social networking service owned by Meta Platforms.",
+        "link": "https://www.instagram.com"
+    },
+    "wikipedia.org": {
+        "description": "Wikipedia is a free online encyclopedia, created and edited by volunteers worldwide.",
+        "link": "https://www.wikipedia.org"
+    },
+    "twitter.com": {
+        "description": "Twitter is a microblogging and social networking service where users post and interact with messages known as 'tweets'.",
+        "link": "https://www.twitter.com"
+    },
+    "reddit.com": {
+        "description": "Reddit is a network of communities where people can dive into their interests, hobbies, and passions.",
+        "link": "https://www.reddit.com"
+    },
+    "yahoo.com": {
+        "description": "Yahoo is a web services provider offering search, email, news, and more.",
+        "link": "https://www.yahoo.com"
+    },
+    "amazon.com": {
+        "description": "Amazon is an online marketplace offering a vast selection of products and services.",
+        "link": "https://www.amazon.com"
+    },
+    "yandex.ru": {
+        "description": "Yandex is a Russian multinational corporation specializing in Internet-related services and products.",
+        "link": "https://www.yandex.ru"
+    },
+    "baidu.com": {
+        "description": "Baidu is a Chinese multinational technology company specializing in Internet-related services and products.",
+        "link": "https://www.baidu.com"
+    },
+    "tiktok.com": {
+        "description": "TikTok is a short-form video hosting service where users can create and share videos.",
+        "link": "https://www.tiktok.com"
+    },
+    "netflix.com": {
+        "description": "Netflix is a streaming service offering a wide variety of TV shows, movies, and documentaries.",
+        "link": "https://www.netflix.com"
+    },
+    "bing.com": {
+        "description": "Bing is a web search engine owned and operated by Microsoft.",
+        "link": "https://www.bing.com"
+    },
+    "linkedin.com": {
+        "description": "LinkedIn is a business and employment-oriented online service that operates via websites and mobile apps.",
+        "link": "https://www.linkedin.com"
+    },
+    "live.com": {
+        "description": "Live.com is a brand for a set of web services and software products from Microsoft.",
+        "link": "https://www.live.com"
+    },
+    "naver.com": {
+        "description": "Naver is a South Korean online platform operated by Naver Corporation.",
+        "link": "https://www.naver.com"
+    },
+    "office.com": {
+        "description": "Office.com is the web portal for Microsoft's Office suite of productivity applications.",
+        "link": "https://www.office.com"
+    },
+    "microsoft.com": {
+        "description": "Microsoft is a multinational technology company producing software, electronics, and personal computers.",
+        "link": "https://www.microsoft.com"
+    },
+    "pinterest.com": {
+        "description": "Pinterest is an image sharing and social media service designed to enable saving and discovery of information on the internet.",
+        "link": "https://www.pinterest.com"
+    }
+}
