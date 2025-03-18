@@ -1,89 +1,113 @@
 {
-    "what is your name?": "I am Snipsearch AI, your AI assistant.",
-    "hello": "Hi I'm Snipsearch AI, your AI Assistant.",
-    "how are you?": "I am just a bunch of codes, but I am here to help you!",
-    "what is the capital of india?": "The capital of India is New Delhi.",
-    "tell me a joke": "Why did the computer go to the doctor? Because it had a virus!"
-}
-{
-    "google.com": {
-        "description": "Google is the world's most popular search engine, enabling users to find information on the web.",
-        "link": "https://www.google.com"
-    },
-    "youtube.com": {
-        "description": "YouTube is a video-sharing platform where users can upload, view, and share videos.",
-        "link": "https://www.youtube.com"
-    },
-    "facebook.com": {
-        "description": "Facebook is a social media network that allows users to connect, share content, and communicate.",
-        "link": "https://www.facebook.com"
-    },
-    "instagram.com": {
-        "description": "Instagram is a photo and video-sharing social networking service owned by Meta Platforms.",
-        "link": "https://www.instagram.com"
-    },
-    "wikipedia.org": {
-        "description": "Wikipedia is a free online encyclopedia, created and edited by volunteers worldwide.",
-        "link": "https://www.wikipedia.org"
-    },
-    "twitter.com": {
-        "description": "Twitter is a microblogging and social networking service where users post and interact with messages known as 'tweets'.",
-        "link": "https://www.twitter.com"
-    },
-    "reddit.com": {
-        "description": "Reddit is a network of communities where people can dive into their interests, hobbies, and passions.",
-        "link": "https://www.reddit.com"
-    },
-    "yahoo.com": {
-        "description": "Yahoo is a web services provider offering search, email, news, and more.",
-        "link": "https://www.yahoo.com"
-    },
-    "amazon.com": {
-        "description": "Amazon is an online marketplace offering a vast selection of products and services.",
-        "link": "https://www.amazon.com"
-    },
-    "yandex.ru": {
-        "description": "Yandex is a Russian multinational corporation specializing in Internet-related services and products.",
-        "link": "https://www.yandex.ru"
-    },
-    "baidu.com": {
-        "description": "Baidu is a Chinese multinational technology company specializing in Internet-related services and products.",
-        "link": "https://www.baidu.com"
-    },
-    "tiktok.com": {
-        "description": "TikTok is a short-form video hosting service where users can create and share videos.",
-        "link": "https://www.tiktok.com"
-    },
-    "netflix.com": {
-        "description": "Netflix is a streaming service offering a wide variety of TV shows, movies, and documentaries.",
-        "link": "https://www.netflix.com"
-    },
-    "bing.com": {
-        "description": "Bing is a web search engine owned and operated by Microsoft.",
-        "link": "https://www.bing.com"
-    },
-    "linkedin.com": {
-        "description": "LinkedIn is a business and employment-oriented online service that operates via websites and mobile apps.",
-        "link": "https://www.linkedin.com"
-    },
-    "live.com": {
-        "description": "Live.com is a brand for a set of web services and software products from Microsoft.",
-        "link": "https://www.live.com"
-    },
-    "naver.com": {
-        "description": "Naver is a South Korean online platform operated by Naver Corporation.",
-        "link": "https://www.naver.com"
-    },
-    "office.com": {
-        "description": "Office.com is the web portal for Microsoft's Office suite of productivity applications.",
-        "link": "https://www.office.com"
-    },
-    "microsoft.com": {
-        "description": "Microsoft is a multinational technology company producing software, electronics, and personal computers.",
-        "link": "https://www.microsoft.com"
-    },
-    "pinterest.com": {
-        "description": "Pinterest is an image sharing and social media service designed to enable saving and discovery of information on the internet.",
-        "link": "https://www.pinterest.com"
-    }
-}
+    "hello": "Hi! How can I assist you today?",
+    "how are you?": "I'm just a bot, but I'm doing great!",
+    "who created you?": "I was created by Snipsearch Technologies.",
+    "what is ai?": "AI stands for Artificial Intelligence, which enables machines to mimic human intelligence.",
+    "what is machine learning?": "Machine Learning is a subset of AI that allows systems to learn from data and improve over time.",
+    "what is programming?": "Programming is the process of creating instructions for computers using code.",
+    "tell me a joke": "Why did the computer go to the doctor? Because it had a virus!",
+    "what is chatbot?": "A chatbot is a software application used to conduct online chat conversations via text or text-to-speech.",
+    "what is html?": "HTML stands for HyperText Markup Language. It is used to structure content on the web.",
+    "top 20 most visited websites": [
+        {
+            "name": "Google",
+            "description": "The world's most popular search engine.",
+            "link": "https://www.google.com"
+        },
+        {
+            "name": "YouTube",
+            "description": "A video-sharing platform where users can watch, like, share, comment, and upload videos.",
+            "link": "https://www.youtube.com"
+        },
+        {
+            "name": "Facebook",
+            "description": "A social networking site that allows users to create profiles, share photos and videos, and communicate with friends and family.",
+            "link": "https://www.facebook.com"
+        },
+        {
+            "name": "Wikipedia",
+            "description": "A free online encyclopedia with articles on a wide range of topics.",
+            "link": "https://www.wikipedia.org"
+        },
+        {
+            "name": "Instagram",
+            "description": "A photo and video-sharing social networking service.",
+            "link": "https://www.instagram.com"
+        },
+        {
+            "name": "Reddit",
+            "description": "A network of communities where people can dive into their interests, hobbies, and passions.",
+            "link": "https://www.reddit.com"
+        },
+        {
+            "name": "Bing",
+            "description": "A web search engine owned and operated by Microsoft.",
+            "link": "https://www.bing.com"
+        },
+        {
+            "name": "Twitter",
+            "description": "A social networking service where users post and interact with messages known as 'tweets'.",
+            "link": "https://www.twitter.com"
+        },
+        {
+            "name": "WhatsApp",
+            "description": "A freeware messaging and voice over IP service.",
+            "link": "https://www.whatsapp.com"
+        },
+        {
+            "name": "Yahoo",
+            "description": "A web services provider offering search, email, and news.",
+            "link": "https://www.yahoo.com"
+        },
+        {
+            "name": "Amazon",
+            "description": "An online marketplace for buying and selling a wide variety of goods.",
+            "link": "https://www.amazon.com"
+        },
+        {
+            "name": "Yandex",
+            "description": "A Russian multinational corporation specializing in Internet-related products and services.",
+            "link": "https://www.yandex.ru"
+        },
+        {
+            "name": "Netflix",
+            "description": "A streaming service offering a wide variety of TV shows, movies, and documentaries.",
+            "link": "https://www.netflix.com"
+        },
+        {
+            "name": "LinkedIn",
+            "description": "A business and employment-oriented online service that operates via websites and mobile apps.",
+            "link": "https://www.linkedin.com"
+        },
+        {
+            "name": "Live",
+            "description": "Microsoft's online services and products.",
+            "link": "https://www.live.com"
+        },
+        {
+            "name": "Twitch",
+            "description": "A live streaming platform for gamers and other lifestyles.",
+            "link": "https://www.twitch.tv"
+        },
+        {
+            "name": "MSN",
+            "description": "A web portal and related collection of Internet services and apps for Windows and mobile devices.",
+            "link": "https://www.msn.com"
+        },
+        {
+            "name": "Pinterest",
+            "description": "A social media network that allows users to visually share and discover new interests.",
+            "link": "https://www.pinterest.com"
+        },
+        {
+            "name": "TikTok",
+            "description": "A short-form video-sharing app that allows users to create and share 15-second videos on any topic.",
+            "link": "https://www.tiktok.com"
+        },
+        {
+            "name": "eBay",
+            "description": "An online auction and shopping website in which people and businesses buy and sell a wide variety of goods and services.",
+            "link": "https://www.ebay.com"
+        }
+    ]
+        }
