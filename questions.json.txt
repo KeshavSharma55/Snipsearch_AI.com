@@ -1,0 +1,113 @@
+{
+    "hello": "Hi! How can I assist you today?",
+    "how are you?": "I'm just a bot, but I'm doing great!",
+    "who created you?": "I was created by Snipsearch Technologies.",
+    "what is ai?": "AI stands for Artificial Intelligence, which enables machines to mimic human intelligence.",
+    "what is machine learning?": "Machine Learning is a subset of AI that allows systems to learn from data and improve over time.",
+    "what is programming?": "Programming is the process of creating instructions for computers using code.",
+    "tell me a joke": "Why did the computer go to the doctor? Because it had a virus!",
+    "what is chatbot?": "A chatbot is a software application used to conduct online chat conversations via text or text-to-speech.",
+    "what is html?": "HTML stands for HyperText Markup Language. It is used to structure content on the web.",
+    "top 20 most visited websites": [
+        {
+            "name": "Google",
+            "description": "The world's most popular search engine.",
+            "link": "https://www.google.com"
+        },
+        {
+            "name": "YouTube",
+            "description": "A video-sharing platform where users can watch, like, share, comment, and upload videos.",
+            "link": "https://www.youtube.com"
+        },
+        {
+            "name": "Facebook",
+            "description": "A social networking site that allows users to create profiles, share photos and videos, and communicate with friends and family.",
+            "link": "https://www.facebook.com"
+        },
+        {
+            "name": "Wikipedia",
+            "description": "A free online encyclopedia with articles on a wide range of topics.",
+            "link": "https://www.wikipedia.org"
+        },
+        {
+            "name": "Instagram",
+            "description": "A photo and video-sharing social networking service.",
+            "link": "https://www.instagram.com"
+        },
+        {
+            "name": "Reddit",
+            "description": "A network of communities where people can dive into their interests, hobbies, and passions.",
+            "link": "https://www.reddit.com"
+        },
+        {
+            "name": "Bing",
+            "description": "A web search engine owned and operated by Microsoft.",
+            "link": "https://www.bing.com"
+        },
+        {
+            "name": "Twitter",
+            "description": "A social networking service where users post and interact with messages known as 'tweets'.",
+            "link": "https://www.twitter.com"
+        },
+        {
+            "name": "WhatsApp",
+            "description": "A freeware messaging and voice over IP service.",
+            "link": "https://www.whatsapp.com"
+        },
+        {
+            "name": "Yahoo",
+            "description": "A web services provider offering search, email, and news.",
+            "link": "https://www.yahoo.com"
+        },
+        {
+            "name": "Amazon",
+            "description": "An online marketplace for buying and selling a wide variety of goods.",
+            "link": "https://www.amazon.com"
+        },
+        {
+            "name": "Yandex",
+            "description": "A Russian multinational corporation specializing in Internet-related products and services.",
+            "link": "https://www.yandex.ru"
+        },
+        {
+            "name": "Netflix",
+            "description": "A streaming service offering a wide variety of TV shows, movies, and documentaries.",
+            "link": "https://www.netflix.com"
+        },
+        {
+            "name": "LinkedIn",
+            "description": "A business and employment-oriented online service that operates via websites and mobile apps.",
+            "link": "https://www.linkedin.com"
+        },
+        {
+            "name": "Live",
+            "description": "Microsoft's online services and products.",
+            "link": "https://www.live.com"
+        },
+        {
+            "name": "Twitch",
+            "description": "A live streaming platform for gamers and other lifestyles.",
+            "link": "https://www.twitch.tv"
+        },
+        {
+            "name": "MSN",
+            "description": "A web portal and related collection of Internet services and apps for Windows and mobile devices.",
+            "link": "https://www.msn.com"
+        },
+        {
+            "name": "Pinterest",
+            "description": "A social media network that allows users to visually share and discover new interests.",
+            "link": "https://www.pinterest.com"
+        },
+        {
+            "name": "TikTok",
+            "description": "A short-form video-sharing app that allows users to create and share 15-second videos on any topic.",
+            "link": "https://www.tiktok.com"
+        },
+        {
+            "name": "eBay",
+            "description": "An online auction and shopping website in which people and businesses buy and sell a wide variety of goods and services.",
+            "link": "https://www.ebay.com"
+        }
+    ]
+}
