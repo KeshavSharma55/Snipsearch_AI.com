@@ -1,27 +1,13 @@
-// Snipsearch AI - JavaScript Code (Using Google Search API)
+// Snipsearch AI - JavaScript Code (Using Google Search API with Predefined Questions)
 
-// URL of the external JSON file (Replace with your own URL)
-const jsonURL = "https://raw.githubusercontent.com/KeshavSharma55/Snipsearch_AI.com/refs/heads/main/questions.json";
-
-// Variable to store predefined responses
-let predefinedResponses = {};
-
-// Load predefined questions from JSON file
-async function loadPredefinedQuestions() {
-    try {
-        const response = await fetch(jsonURL, {cache: "no-cache"});
-        if (!response.ok) {
-            throw new Error("Network response was not ok.");
-        }
-        predefinedResponses = await response.json();
-        console.log("Predefined questions loaded successfully.", predefinedResponses);
-    } catch (error) {
-        console.error("Error loading predefined questions:", error);
-    }
-}
-
-// Call the function to load questions
-loadPredefinedQuestions();
+// Predefined responses stored directly in the script
+const predefinedResponses = {
+    "what is snipsearch ai?": "Snipsearch AI is an advanced AI chatbot designed to assist you with various queries, calculations, and more!",
+    "who created snipsearch ai?": "Snipsearch AI was created by Keshav Sharma under Copenet Technologies.",
+    "what is ai?": "AI stands for Artificial Intelligence, which is the simulation of human intelligence in machines that can perform tasks requiring human-like thinking.",
+    "hello": "Hello! How can I assist you today?",
+    "how are you?": "I'm just a program, but thanks for asking! How can I help you today?"
+};
 
 // Function to send user message
 async function sendMessage() {
@@ -75,7 +61,7 @@ function evaluateMath(expression) {
     return Function('"use strict"; return (' + expression + ')')();
 }
 
-// Google Search API Fetch (Returning Long Description)
+// Google Search API Fetch (Returning Clickable Links)
 async function fetchGoogleSearch(query) {
     try {
         const apiKey = "AIzaSyDFliUSc0-bUmwbM1YR4wmQXk5wVgGV6-A";  // Your API Key
@@ -87,7 +73,7 @@ async function fetchGoogleSearch(query) {
 
         if (data.items && data.items.length > 0) {
             let results = data.items.map(item => 
-                `Title: ${item.title}\nDescription: ${item.snippet}\nLink: ${item.link}\n\n`
+                `Title: ${item.title}<br>Description: ${item.snippet}<br>Link: <a href="${item.link}" target="_blank">${item.link}</a><br><br>`
             ).join('');
             
             return results;
