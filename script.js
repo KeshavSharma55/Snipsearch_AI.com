@@ -1,4 +1,4 @@
-// Snipsearch AI - JavaScript Code (Fixed URL Fetch Method)
+// Snipsearch AI - JavaScript Code (Using Google Search API)
 
 // URL of the external JSON file (Replace with your own URL)
 const jsonURL = "https://raw.githubusercontent.com/KeshavSharma55/Snipsearch_AI.com/refs/heads/main/questions.json";
@@ -64,8 +64,8 @@ async function getBotResponse(query) {
         }
     }
 
-    // Fetch Data from DuckDuckGo (By Default)
-    response = await fetchDuckDuckGo(query);
+    // Fetch Data from Google Search (By Default)
+    response = await fetchGoogleSearch(query);
 
     return response || "I'm not sure, but I'm still learning!";
 }
@@ -75,22 +75,26 @@ function evaluateMath(expression) {
     return Function('"use strict"; return (' + expression + ')')();
 }
 
-// DuckDuckGo API Search
-async function fetchDuckDuckGo(query) {
+// Google Search API Fetch (Returning Long Description)
+async function fetchGoogleSearch(query) {
     try {
-        let url = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json`;
+        const apiKey = "AIzaSyDFliUSc0-bUmwbM1YR4wmQXk5wVgGV6-A";  // Your API Key
+        const cx = "c7621a78e53794892";                            // Your Search Engine ID
+        
+        let url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${apiKey}&cx=${cx}`;
         let res = await fetch(url);
         let data = await res.json();
-        
-        if (data.Abstract) {
-            return data.Abstract;
-        } else if (data.RelatedTopics && data.RelatedTopics.length > 0) {
-            let relatedInfo = data.RelatedTopics[0].Text;
-            return relatedInfo ? `DuckDuckGo: ${relatedInfo}` : "No relevant information found.";
+
+        if (data.items && data.items.length > 0) {
+            let results = data.items.map(item => 
+                `Title: ${item.title}\nDescription: ${item.snippet}\nLink: ${item.link}\n\n`
+            ).join('');
+            
+            return results;
         } else {
             return "No relevant information found.";
         }
     } catch (error) {
-        return "Unable to fetch data from DuckDuckGo.";
+        return "Unable to fetch data from Google.";
     }
-                                           }
+}
